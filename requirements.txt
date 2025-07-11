@@ -1,0 +1,5 @@
+fastapi==0.116.0
+semantic-kernel==1.33.0
+uvicorn==0.34.3
+mcp==1.9.2
+python-dotenv==1.1.1
