@@ -1,3 +1,5 @@
+# src\plugins\FechaPlugin.py
+import logging
 from datetime import datetime
 from semantic_kernel.functions import kernel_function
 
@@ -10,6 +12,7 @@ class FechaPlugin:
         """
         try:
             ahora = datetime.now()
+            logging.info(f"[FechaPlugin] Se accedió a la herramienta.")
             return ahora.strftime("%Y-%m-%d %H:%M:%S")
         except Exception as e:
             return f"ERROR: {str(e)}"

@@ -142,7 +142,7 @@ async function queryContainer(params) {
         const { resources } = await container.items.query({
             query,
             parameters: parameters.map(p => ({
-                name: p.name.startsWith('@') ? p.name : '@' + p.name, // <- Agrega esta línea
+                name: p.name.startsWith('@') ? p.name : '@' + p.name, // <- 
                 value: p.value
             }))
         }).fetchAll();

@@ -1,3 +1,4 @@
+# src\agents\QueryBuilder.py
 import logging
 import os
 
@@ -6,7 +7,7 @@ from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion, OpenAICha
 from semantic_kernel.functions import KernelArguments
 
 from src.models.CosmosSqlQuery import CosmosSqlQuery
-from src.plugins.TelegramaPlugin import TelegramaPlugin
+from src.plugins.CodificarTelegramaPlugin import CodificarTelegramaPlugin
 from src.plugins.FechaPlugin import FechaPlugin
 from src.utils.Metaprompts import metaprompt_querybuilder_agent
 
@@ -30,7 +31,7 @@ async def init_agent_querybuilder():
                 database=os.getenv("COSMOS_DATABASE_ID", "cambrica_db"),
                 container=os.getenv("COSMOS_CONTAINER_ID", "history")
             ),
-            plugins=[TelegramaPlugin, FechaPlugin],
+            plugins=[CodificarTelegramaPlugin(), FechaPlugin()],
             arguments=KernelArguments(settings=execution_settings)
         )
 
