@@ -1,6 +1,6 @@
-# app\src\plugins\mcp\McpCosmosPlugin.py
 import logging
 import os
+import sys
 
 from semantic_kernel.connectors.mcp import MCPStdioPlugin
 
@@ -8,6 +8,9 @@ mcp_cosmos_plugin = None
 
 async def init_mcp_cosmos_plugin():
     global mcp_cosmos_plugin
+
+    if mcp_cosmos_plugin:
+        return mcp_cosmos_plugin
 
     try:
         mcp_cosmos_plugin = MCPStdioPlugin(
@@ -28,4 +31,4 @@ async def init_mcp_cosmos_plugin():
         return mcp_cosmos_plugin
     except Exception as e:
         logging.error(f"[MCPCosmosPlugin] Error: No fue posible generar mcp_cosmos_plugin. {str(e)}")
-        return None
+        sys.exit(1)

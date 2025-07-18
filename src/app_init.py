@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 from src.agents import Orquestador
 from src.plugins.mcp import McpCosmosPlugin
@@ -17,6 +18,8 @@ async def lifespan(app: FastAPI):
 
 def init_app() -> FastAPI:
     app = FastAPI(lifespan=lifespan)
+
+    app.mount("/docs/telegramas", StaticFiles(directory="docs/telegramas"), name="telegramas")
 
     app.include_router(IndexRoutes.router, prefix="")
     app.include_router(ChatRoutes.router, prefix="/chat")
