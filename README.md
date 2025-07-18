@@ -29,10 +29,13 @@ Este proyecto implementa un **asistente inteligente** que permite construir cons
     pip install -r requirements.txt
 <br>
 
-3. **Instala Node.js y dependencias del plugin MCP**:<br>
+3. **Instala Node.js y dependencias del plugin MCP y el generador de archivos .CSV**:<br>
     Asegúrate de tener Node.js instalado (node -v). Luego:
    ```bash
-    cd app/src/plugins/mcp/js
+    cd src/plugins/mcp/js
+    npm install
+    cd ../../../..
+    cd src/plugins/js
     npm install
 <br>
 
@@ -70,11 +73,11 @@ Esto inicializará:
     Endpoint al que se envían los mensajes del usuario en el cuerpo del JSON:
     ```json
     {
-        "mensaje": "¿Cuántos mensajes de tipo RAMPSTATE hay hoy?",
+        "mensaje": "¿Cuál es el último telegrama de NEWIDCODE?",
         "user_id": "123"
     }
 <br>
 
 ## 🖼 Captura de pantalla
 
-![Chat funcionando](docs\img\chat-img.png)
+![Chat funcionando](/docs/img/chat-img.png)

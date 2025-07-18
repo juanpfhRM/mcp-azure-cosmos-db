@@ -125,10 +125,10 @@
     const input = document.getElementById("input-message");
     const button = document.getElementById("send-button");
 
-    function addMessage(text, sender) {
+    function addMessage(text, sender, extraHTML = "") {
       const div = document.createElement("div");
       div.className = `message ${sender}`;
-      div.innerText = text;
+      div.innerHTML = `<div>${text}</div>${extraHTML}`;
       chatBox.appendChild(div);
       chatBox.scrollTop = chatBox.scrollHeight;
       return div;
@@ -146,6 +146,19 @@
     function removeTypingIndicator() {
       const typing = document.getElementById("typing-indicator");
       if (typing) typing.remove();
+    }
+
+    function crearEnlaceCSV(csvPath) {
+      if (!csvPath) return "";
+      const linkText = "📥 Descargar CSV generado";
+      return `
+        <div style="margin-top: 8px;">
+          <a href="${csvPath}" download target="_blank"
+            style="display:inline-block; padding:6px 12px; background:#28a745; color:#fff; text-decoration:none; border-radius:4px;">
+            ${linkText}
+          </a>
+        </div>
+      `;
     }
 
     async function sendMessage() {
@@ -166,7 +179,10 @@
 
         const data = await response.json();
         removeTypingIndicator();
-        addMessage(data.respuesta || "Error del servidor", "bot");
+
+        const text = data.response || "Respuesta vacía del servidor.";
+        const enlaceDescarga = crearEnlaceCSV(data.csv_path);
+        addMessage(text, "bot", enlaceDescarga);
       } catch (e) {
         removeTypingIndicator();
         addMessage("Ocurrió un error al conectarse al servidor.", "bot");
