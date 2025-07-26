@@ -29,12 +29,15 @@ Este proyecto implementa un **asistente inteligente** que permite construir cons
     pip install -r requirements.txt
 <br>
 
-3. **Instala Node.js, las dependencias del plugin MCP y el generador de archivos .CSV**:<br>
+3. **Instala Node.js, las dependencias de los plugins MCP y los generadores de archivos .CSV**:<br>
     Asegúrate de tener Node.js instalado (node -v). Luego:
    ```bash
-    cd src/plugins/mcp/js
+    cd src/plugins/mcp/cosmos/js
     npm install
-    cd ../../../..
+    cd ../../
+    cd logAnalytics/js
+    npm install
+    cd ../../../../../
     cd src/plugins/js
     npm install
 <br>
@@ -46,6 +49,8 @@ Este proyecto implementa un **asistente inteligente** que permite construir cons
     COSMOSDB_KEY=
     COSMOS_DATABASE_ID=
     COSMOS_CONTAINER_ID=
+
+    LOG_ANALYTICS_WORKSPACE_ID=
 
     AZURE_OPENAI_API_KEY=
     AZURE_OPENAI_ENDPOINT=
@@ -61,7 +66,7 @@ Este proyecto implementa un **asistente inteligente** que permite construir cons
 Esto inicializará:
 - Los agentes
 - El servidor FastAPI (normalmente en http://127.0.0.1:8000)
-- El plugin MCP vía Node.js
+- Los plugins MCP vía Node.js
 <br>
 
 ## 🧪 Endpoints principales

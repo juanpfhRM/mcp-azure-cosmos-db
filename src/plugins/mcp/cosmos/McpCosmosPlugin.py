@@ -17,7 +17,7 @@ async def init_mcp_cosmos_plugin():
             name="AzureCosmosDBTools",
             description="Azure Cosmos DB Management Tools",
             command="node",
-            args=["src/plugins/mcp/js/index.js"],
+            args=["src/plugins/mcp/cosmos/js/index.js"],
             env={
                 "COSMOSDB_URI": os.getenv("COSMOSDB_URI"),
                 "COSMOSDB_KEY": os.getenv("COSMOSDB_KEY"),

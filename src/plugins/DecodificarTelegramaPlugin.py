@@ -26,4 +26,5 @@ class DecodificarTelegramaPlugin:
             logging.info(f"[TelegramaPlugin] Se decodificó el telegrama.")
             return telegrama_texto
         except Exception as e:
-            return f"ERROR: {str(e)}"
+            logging.info(f"[TelegramaPlugin] No se decodificó el telegrama, se devolvió el valor inicial.")
+            return telegrama_base64

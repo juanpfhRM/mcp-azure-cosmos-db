@@ -1,18 +1,30 @@
-from src.agents.ReporteQuery import init_agent_reportquery
-from src.agents.TelegramaQuery import init_agent_telegramaquery
-from src.agents.TelegramaQueryCSV import init_agent_telegramaquery_csv
-from src.plugins.ReporteQueryPlugin import ReporteQueryPlugin
-from src.plugins.TelegramaQueryPlugin import TelegramaQueryPlugin
-from src.plugins.TelegramaQueryCSVPlugin import TelegramaQueryCSVPlugin
+from src.agents.ReporteCQuery import init_agent_reportecquery
+from src.agents.TelegramaCQuery import init_agent_telegramacquery
+from src.agents.TelegramaKQuery import init_agent_telegramakquery
+from src.agents.TelegramaCQueryCSV import init_agent_telegramacquery_csv
+from src.agents.TelegramaKQueryCSV import init_agent_telegramakquery_csv
+from src.plugins.ReporteCQueryPlugin import ReporteCQueryPlugin
+from src.plugins.TelegramaCQueryPlugin import TelegramaCQueryPlugin
+from src.plugins.TelegramaKQueryPlugin import TelegramaKQueryPlugin
+from src.plugins.TelegramaCQueryCSVPlugin import TelegramaCQueryCSVPlugin
+from src.plugins.TelegramaKQueryCSVPlugin import TelegramaKQueryCSVPlugin
 
-async def init_reportequery_plugin():
-    agent = await init_agent_reportquery()
-    return ReporteQueryPlugin(agent)
+async def init_reportecquery_plugin():
+    agent = await init_agent_reportecquery()
+    return ReporteCQueryPlugin(agent)
 
-async def init_telegramaquery_plugin():
-    agent = await init_agent_telegramaquery()
-    return TelegramaQueryPlugin(agent)
+async def init_telegramacquery_plugin():
+    agent = await init_agent_telegramacquery()
+    return TelegramaCQueryPlugin(agent)
 
-async def init_telegramaquery_csv_plugin():
-    agent = await init_agent_telegramaquery_csv()
-    return TelegramaQueryCSVPlugin(agent)
+async def init_telegramakquery_plugin():
+    agent = await init_agent_telegramakquery()
+    return TelegramaKQueryPlugin(agent)
+
+async def init_telegramacquery_csv_plugin():
+    agent = await init_agent_telegramacquery_csv()
+    return TelegramaCQueryCSVPlugin(agent)
+
+async def init_telegramakquery_csv_plugin():
+    agent = await init_agent_telegramakquery_csv()
+    return TelegramaKQueryCSVPlugin(agent)

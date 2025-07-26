@@ -31,10 +31,10 @@ class FechaPlugin:
 
     @staticmethod
     @kernel_function(
-        name="obtener_lunes_esta_semana",
-        description="Devuelve la fecha del lunes de esta semana (formato YYYY-MM-DD)."
+        name="obtener_lunes_pasado",
+        description="Devuelve la fecha del lunes pasado (formato YYYY-MM-DD)."
     )
-    def obtener_lunes_esta_semana() -> str:
+    def obtener_lunes_pasado() -> str:
         try:
             hoy = datetime.now()
             lunes = hoy - timedelta(days=hoy.weekday())
@@ -42,18 +42,18 @@ class FechaPlugin:
         except Exception as e:
             return f"ERROR: {str(e)}"
 
-    @staticmethod
-    @kernel_function(
-        name="obtener_lunes_semana_pasada",
-        description="Devuelve la fecha del lunes de la semana pasada (formato YYYY-MM-DD)."
-    )
-    def obtener_lunes_semana_pasada() -> str:
-        try:
-            hoy = datetime.now()
-            lunes_pasado = hoy - timedelta(days=hoy.weekday() + 7)
-            return lunes_pasado.strftime("%Y-%m-%d")
-        except Exception as e:
-            return f"ERROR: {str(e)}"
+    # @staticmethod
+    # @kernel_function(
+    #     name="obtener_lunes_semana_pasada",
+    #     description="Devuelve la fecha del lunes de la semana pasada (formato YYYY-MM-DD)."
+    # )
+    # def obtener_lunes_semana_pasada() -> str:
+    #     try:
+    #         hoy = datetime.now()
+    #         lunes_pasado = hoy - timedelta(days=hoy.weekday() + 7)
+    #         return lunes_pasado.strftime("%Y-%m-%d")
+    #     except Exception as e:
+    #         return f"ERROR: {str(e)}"
 
     @staticmethod
     @kernel_function(

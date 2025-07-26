@@ -10,9 +10,9 @@ from semantic_kernel.functions import kernel_function
 
 from src.models.CosmosSqlQuery import CosmosSqlQuery
 
-class TelegramaQueryCSVPlugin:
-    def __init__(self, agent_telegramaquery_csv):
-        self.agent_telegramaquery_csv = agent_telegramaquery_csv
+class TelegramaCQueryCSVPlugin:
+    def __init__(self, agent_telegramacquery_csv):
+        self.agent_telegramacquery_csv = agent_telegramacquery_csv
 
     @kernel_function(
         name="obtener_varios_telegramas_bd",
@@ -20,25 +20,25 @@ class TelegramaQueryCSVPlugin:
     )
     async def obtener_varios_telegramas_bd(self, peticion: str) -> str:
         try:
-            completion = await self.agent_telegramaquery_csv.get_response(peticion)
-            logging.info(f"[TelegramaQueryCSVPlugin] Respuesta generada:\n{completion.content.content}")
+            completion = await self.agent_telegramacquery_csv.get_response(peticion)
+            logging.info(f"[TelegramaCQueryCSVPlugin] Respuesta generada:\n{completion.content.content}")
             return completion.content.content
         except Exception as e:
-            logging.error(f"[TelegramaQueryCSVPlugin] Error: {str(e)}")
+            logging.error(f"[TelegramaCQueryCSVPlugin] Error: {str(e)}")
             return f"ERROR: {str(e)}"
 
     @kernel_function(
-        name="generar_csv_telegramas",
+        name="generar_csv_ctelegramas",
         description="Recibe una consulta en SQL junto con sus parámetros. Usarse cuando se requiere obtener un .CSV con todos los telegramas requeridos y su información, respectivamente. Devuelve la ruta del archivo."
     )
-    def generar_csv_telegramas(self, sql_query_obj: CosmosSqlQuery) -> str:
-        logging.info(f"[generar_csv_telegramas] Objeto de consulta SQL recibido: {sql_query_obj.model_dump_json()}")
+    def generar_csv_ctelegramas(self, sql_query_obj: CosmosSqlQuery) -> str:
+        logging.info(f"[generar_csv_ctelegramas] Objeto de consulta SQL recibido: {sql_query_obj.model_dump_json()}")
         try:
             query = sql_query_obj.query
             raw_parameters_list = sql_query_obj.parameters
 
-            logging.info(f"[generar_csv_telegramas] Consulta extraída: {query}")
-            logging.info(f"[generar_csv_telegramas] Parámetros crudos (lista): {raw_parameters_list}")
+            logging.info(f"[generar_csv_ctelegramas] Consulta extraída: {query}")
+            logging.info(f"[generar_csv_ctelegramas] Parámetros crudos (lista): {raw_parameters_list}")
 
             processed_parameters: Dict[str, Union[str, int, float, bool]] = {}
             if raw_parameters_list:
@@ -46,10 +46,10 @@ class TelegramaQueryCSVPlugin:
                     if "name" in param_item and "value" in param_item:
                         processed_parameters[param_item["name"]] = param_item["value"]
                     else:
-                        logging.warning(f"[{self.__class__.__name__}.generar_csv_telegramas] Elemento de parámetro con formato inesperado, saltando: {param_item}")
+                        logging.warning(f"[{self.__class__.__name__}.generar_csv_ctelegramas] Elemento de parámetro con formato inesperado, saltando: {param_item}")
                         raise ValueError("Algún parámetro no poseé el atributo name y/o value.")
 
-            logging.info(f"[generar_csv_telegramas] Parámetros procesados (diccionario): {processed_parameters}")
+            logging.info(f"[generar_csv_ctelegramas] Parámetros procesados (diccionario): {processed_parameters}")
 
             instrucciones_prohibidas = ["DELETE", "UPDATE", "INSERT INTO", "DROP", "ALTER", "TRUNCATE"]
             if any(instr in query.upper() for instr in instrucciones_prohibidas):
@@ -60,11 +60,11 @@ class TelegramaQueryCSVPlugin:
                 "parameters": processed_parameters
             }
 
-            logging.info(f"[generar_csv_telegramas] Payload final para el script JS: {json.dumps(final_payload)}")
+            logging.info(f"[generar_csv_ctelegramas] Payload final para el script JS: {json.dumps(final_payload)}")
 
-            logging.info(f"[generar_csv_telegramas] Ejecutando script de Node.js: src/plugins/js/generar_csv_telegramas.js")
+            logging.info(f"[generar_csv_ctelegramas] Ejecutando script de Node.js: src/plugins/js/generar_csv_ctelegramas.js")
             result = subprocess.run(
-                ['node', 'src/plugins/js/generar_csv_telegramas.js'],
+                ['node', 'src/plugins/js/generar_csv_ctelegramas.js'],
                 input=json.dumps(final_payload),
                 capture_output=True,
                 text=True,
@@ -73,20 +73,20 @@ class TelegramaQueryCSVPlugin:
             )
 
             output = result.stdout.strip()
-            logging.info(f"[generar_csv_telegramas] Salida cruda del script JS: '{output}'")
+            logging.info(f"[generar_csv_ctelegramas] Salida cruda del script JS: '{output}'")
 
             if result.stderr:
-                logging.error(f"[{self.__class__.__name__}.generar_csv_telegramas] Errores en stderr del script JS: '{result.stderr.strip()}'")
+                logging.error(f"[generar_csv_ctelegramas] Errores en stderr del script JS: '{result.stderr.strip()}'")
                 raise ValueError(f"Errores en stderr del script JS: '{result.stderr.strip()}")
 
             if not output:
-                logging.warning(f"[{self.__class__.__name__}.generar_csv_telegramas] El script JS no devolvió ninguna salida.")
+                logging.warning(f"[generar_csv_ctelegramas] El script JS no devolvió ninguna salida.")
                 raise ValueError("El script JS no devolvió ninguna salida.")
 
             json_output = json.loads(output)
-            logging.info(f"[generar_csv_telegramas] Salida JSON parseada del script JS: {json_output}")
+            logging.info(f"[generar_csv_ctelegramas] Salida JSON parseada del script JS: {json_output}")
             if "csv_path" not in json_output or not json_output["csv_path"]:
-                logging.warning(f"[{self.__class__.__name__}.generar_csv_telegramas] La salida JSON del script JS no contiene 'csv_path' o está vacío.")
+                logging.warning(f"[generar_csv_ctelegramas] La salida JSON del script JS no contiene 'csv_path' o está vacío.")
 
             return json_output
 

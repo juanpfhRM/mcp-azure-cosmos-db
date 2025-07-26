@@ -6,7 +6,6 @@ class CosmosSqlQueryResult(BaseModel):
     Representa una consulta SQL para Azure Cosmos DB junto con sus parámetros y resultado.
     """
     query: str
-    # parameters: Optional[Dict[str, Union[str, int, float, bool]]] = None
     parameters: Optional[List[Dict[str, Union[str, int, float, bool]]]] = None
     result: str
 
@@ -14,10 +13,9 @@ class CosmosSqlQueryResult(BaseModel):
 
 class CosmosSqlQuery(BaseModel):
     """
-    Representa una consulta SQL para Azure Cosmos DB junto con sus parámetros y resultado.
+    Representa una consulta SQL para Azure Cosmos DB junto con su resultado.
     """
     query: str
-    # parameters: Optional[Dict[str, Union[str, int, float, bool]]] = None
     parameters: Optional[List[Dict[str, Union[str, int, float, bool]]]] = None
 
     model_config = ConfigDict(extra="forbid")

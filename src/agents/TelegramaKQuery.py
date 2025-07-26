@@ -6,13 +6,13 @@ from semantic_kernel.agents import ChatCompletionAgent
 from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion, OpenAIChatPromptExecutionSettings
 from semantic_kernel.functions import KernelArguments
 
-from src.models.CosmosSqlQuery import CosmosSqlQueryResult
+from src.models.LogAnalyticsKqlQuery import LogAnalyticsKqlQueryResult
 from src.plugins.CodificarTelegramaPlugin import CodificarTelegramaPlugin
 from src.plugins.FechaPlugin import FechaPlugin
-from src.plugins.mcp import McpCosmosPlugin
-from src.utils.Metaprompts import metaprompt_telegramaquery_agent
+from src.plugins.mcp.logAnalytics import McpLogAnalyticsPlugin
+from src.utils.Metaprompts import metaprompt_telegramakquery_agent
 
-async def init_agent_telegramaquery():
+async def init_agent_telegramakquery():
     try:
         
         chat_service = AzureChatCompletion(
@@ -22,24 +22,24 @@ async def init_agent_telegramaquery():
             api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
         )
 
-        mcp_cosmos_plugin = await McpCosmosPlugin.init_mcp_cosmos_plugin()
+        mcp_log_analytics_plugin = await McpLogAnalyticsPlugin.init_mcp_log_analytics_plugin()
 
         execution_settings = OpenAIChatPromptExecutionSettings()
-        execution_settings.response_format = CosmosSqlQueryResult
+        execution_settings.response_format = LogAnalyticsKqlQueryResult
 
-        agent_telegramaquery= ChatCompletionAgent(
+        agent_telegramakquery = ChatCompletionAgent(
             service=chat_service,
-            name="TelegramaQuery",
-            instructions=metaprompt_telegramaquery_agent.substitute(
+            name="TelegramaKQuery",
+            instructions=metaprompt_telegramakquery_agent.substitute(
                 database=os.getenv("COSMOS_DATABASE_ID", "cambrica_db"),
                 container=os.getenv("COSMOS_CONTAINER_ID", "history")
             ),
-            plugins=[mcp_cosmos_plugin, CodificarTelegramaPlugin(), FechaPlugin()],
+            plugins=[mcp_log_analytics_plugin, CodificarTelegramaPlugin(), FechaPlugin()],
             arguments=KernelArguments(settings=execution_settings)
         )
 
-        logging.info(f"[TelegramaQuery] agent_telegramaquery generado correctamente.")
-        return agent_telegramaquery
+        logging.info(f"[TelegramaKQuery] agent_telegramakquery generado correctamente.")
+        return agent_telegramakquery
     except Exception as e:
-        logging.error(f"[TelegramaQuery] Error: No fue posible generar agent_telegramaquery. {str(e)}")
+        logging.error(f"[TelegramaKQuery] Error: No fue posible generar agent_telegramakquery. {str(e)}")
         sys.exit(1)

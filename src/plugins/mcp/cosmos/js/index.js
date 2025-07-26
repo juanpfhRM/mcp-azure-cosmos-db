@@ -3,14 +3,20 @@ import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { CallToolRequestSchema, ListToolsRequestSchema, } from "@modelcontextprotocol/sdk/types.js";
 import { CosmosClient } from "@azure/cosmos";
-// import * as dotenv from "dotenv";
-// dotenv.config();
-// Cosmos DB client initialization
+
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err.message || err);
+});
+
+process.on('unhandledRejection', (reason) => {
+    console.error('Unhandled Rejection:', reason?.message || reason);
+});
+
 const cosmosClient = new CosmosClient({
     endpoint: process.env.COSMOSDB_URI,
     key: process.env.COSMOSDB_KEY,
 });
-// Get DB and container config from env vars
+
 const databaseId = process.env.COSMOS_DATABASE_ID;
 const containerId = process.env.COSMOS_CONTAINER_ID;
 const container = cosmosClient.database(databaseId).container(containerId);
@@ -152,10 +158,14 @@ async function queryContainer(params) {
             items: resources,
         };
     } catch (error) {
-        console.error("Error querying container:", error);
+        const safeErrorMessage = (error && typeof error === 'object' && 'message' in error)
+            ? error.message
+            : String(error);
+
         return {
             success: false,
-            message: `Failed to query container: ${error}`,
+            message: `Failed to query container: ${safeErrorMessage}`,
+            items: [],
         };
     }
 }
@@ -191,16 +201,17 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         }
         return {
             content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+            isError: !result.success,
         };
     }
     catch (error) {
         return {
-            content: [{ type: "text", text: `Error occurred: ${error}` }],
+            content: [{ type: "text", text: `Error occurred: ${error.message || error}` }],
             isError: true,
         };
     }
 });
-// Server startup
+
 async function runServer() {
     const transport = new StdioServerTransport();
     await server.connect(transport);

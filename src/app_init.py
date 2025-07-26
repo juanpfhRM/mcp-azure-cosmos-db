@@ -3,7 +3,8 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
 from src.agents import Orquestador
-from src.plugins.mcp import McpCosmosPlugin
+from src.plugins.mcp.cosmos import McpCosmosPlugin
+from src.plugins.mcp.logAnalytics import McpLogAnalyticsPlugin
 from src.routes import IndexRoutes, ChatRoutes
 
 @asynccontextmanager
@@ -13,6 +14,8 @@ async def lifespan(app: FastAPI):
 
     yield
 
+    if McpLogAnalyticsPlugin.mcp_log_analytics_plugin:
+        await McpLogAnalyticsPlugin.mcp_log_analytics_plugin.__aexit__(None, None, None)
     if McpCosmosPlugin.mcp_cosmos_plugin:
         await McpCosmosPlugin.mcp_cosmos_plugin.__aexit__(None, None, None)
 

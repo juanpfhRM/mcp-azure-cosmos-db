@@ -9,9 +9,9 @@ from semantic_kernel.functions import KernelArguments
 from src.models.CosmosSqlQuery import CosmosSqlQuery
 from src.plugins.CodificarTelegramaPlugin import CodificarTelegramaPlugin
 from src.plugins.FechaPlugin import FechaPlugin
-from src.utils.Metaprompts import metaprompt_telegramaquery_csv_agent
+from src.utils.Metaprompts import metaprompt_telegramacquery_csv_agent
 
-async def init_agent_telegramaquery_csv():
+async def init_agent_telegramacquery_csv():
     try:
         
         chat_service = AzureChatCompletion(
@@ -24,10 +24,10 @@ async def init_agent_telegramaquery_csv():
         execution_settings = OpenAIChatPromptExecutionSettings()
         execution_settings.response_format = CosmosSqlQuery
 
-        agent_telegramaquery_csv= ChatCompletionAgent(
+        agent_telegramacquery_csv= ChatCompletionAgent(
             service=chat_service,
-            name="TelegramaQueryCSV",
-            instructions=metaprompt_telegramaquery_csv_agent.substitute(
+            name="TelegramaCQueryCSV",
+            instructions=metaprompt_telegramacquery_csv_agent.substitute(
                 database=os.getenv("COSMOS_DATABASE_ID", "cambrica_db"),
                 container=os.getenv("COSMOS_CONTAINER_ID", "history")
             ),
@@ -35,8 +35,8 @@ async def init_agent_telegramaquery_csv():
             arguments=KernelArguments(settings=execution_settings)
         )
 
-        logging.info(f"[TelegramaQueryCSV] agent_telegramaquery_csv generado correctamente.")
-        return agent_telegramaquery_csv
+        logging.info(f"[TelegramaCQueryCSV] agent_telegramacquery_csv generado correctamente.")
+        return agent_telegramacquery_csv
     except Exception as e:
-        logging.error(f"[TelegramaQueryCSV] Error: No fue posible generar agent_telegramaquery_csv. {str(e)}")
+        logging.error(f"[TelegramaCQueryCSV] Error: No fue posible generar agent_telegramacquery_csv. {str(e)}")
         sys.exit(1)

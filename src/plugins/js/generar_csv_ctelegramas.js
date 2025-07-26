@@ -63,10 +63,10 @@ async function runQueryDinamico() {
         const parser = new Parser();
         const csv = parser.parse(results);
 
-        const filePath = path.join('docs', 'telegramas', `export_${Date.now()}.csv`);
+        const filePath = path.join('docs', 'telegramas', `export_c${Date.now()}.csv`);
         fs.writeFileSync(filePath, csv, 'utf8');
 
-        console.log(JSON.stringify({ csvPath: filePath }));
+        console.log(JSON.stringify({ csv_path: filePath }));
     } catch (error) {
         console.error(JSON.stringify({ error: error.message }));
         process.exit(1);

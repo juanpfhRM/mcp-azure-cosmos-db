@@ -3,7 +3,7 @@ import os
 
 from semantic_kernel.functions import kernel_function
 
-class ReporteQueryPlugin:
+class ReporteCQueryPlugin:
     def __init__(self, agent_reportequery):
         self.agent_reportequery = agent_reportequery
 

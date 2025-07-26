@@ -6,13 +6,12 @@ from semantic_kernel.agents import ChatCompletionAgent
 from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion, OpenAIChatPromptExecutionSettings
 from semantic_kernel.functions import KernelArguments
 
-from src.models.CosmosSqlQuery import CosmosSqlQueryResult
+from src.models.LogAnalyticsKqlQuery import LogAnalyticsKqlQuery
 from src.plugins.CodificarTelegramaPlugin import CodificarTelegramaPlugin
 from src.plugins.FechaPlugin import FechaPlugin
-from src.plugins.mcp import McpCosmosPlugin
-from src.utils.Metaprompts import metaprompt_reportquery_agent
+from src.utils.Metaprompts import metaprompt_telegramakquery_csv_agent
 
-async def init_agent_reportquery():
+async def init_agent_telegramakquery_csv():
     try:
         
         chat_service = AzureChatCompletion(
@@ -22,24 +21,22 @@ async def init_agent_reportquery():
             api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
         )
 
-        mcp_cosmos_plugin = await McpCosmosPlugin.init_mcp_cosmos_plugin()
-
         execution_settings = OpenAIChatPromptExecutionSettings()
-        execution_settings.response_format = CosmosSqlQueryResult
+        execution_settings.response_format = LogAnalyticsKqlQuery
 
-        agent_reportequery= ChatCompletionAgent(
+        agent_telegramacquery_csv= ChatCompletionAgent(
             service=chat_service,
-            name="ReporteQuery",
-            instructions=metaprompt_reportquery_agent.substitute(
+            name="TelegramaCQueryCSV",
+            instructions=metaprompt_telegramakquery_csv_agent.substitute(
                 database=os.getenv("COSMOS_DATABASE_ID", "cambrica_db"),
                 container=os.getenv("COSMOS_CONTAINER_ID", "history")
             ),
-            plugins=[mcp_cosmos_plugin, CodificarTelegramaPlugin(), FechaPlugin()],
+            plugins=[CodificarTelegramaPlugin(), FechaPlugin()],
             arguments=KernelArguments(settings=execution_settings)
         )
 
-        logging.info(f"[ReporteQuery] agent_reportequery generado correctamente.")
-        return agent_reportequery
+        logging.info(f"[TelegramaKQueryCSV] agent_telegramakquery_csv generado correctamente.")
+        return agent_telegramacquery_csv
     except Exception as e:
-        logging.error(f"[ReporteQuery] Error: No fue posible generar agent_reportequery. {str(e)}")
+        logging.error(f"[TelegramaKQueryCSV] Error: No fue posible generar agent_telegramakquery_csv. {str(e)}")
         sys.exit(1)

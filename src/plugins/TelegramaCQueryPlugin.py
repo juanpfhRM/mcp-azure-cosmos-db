@@ -3,9 +3,9 @@ import os
 
 from semantic_kernel.functions import kernel_function
 
-class TelegramaQueryPlugin:
-    def __init__(self, agent_telegramaquery):
-        self.agent_telegramaquery = agent_telegramaquery
+class TelegramaCQueryPlugin:
+    def __init__(self, agent_telegramacquery):
+        self.agent_telegramacquery = agent_telegramacquery
 
     @kernel_function(
         name="obtener_pocos_telegramas_bd",
@@ -13,9 +13,9 @@ class TelegramaQueryPlugin:
     )
     async def obtener_pocos_telegramas_bd(self, peticion: str) -> str:
         try:
-            completion = await self.agent_telegramaquery.get_response(peticion)
-            logging.info(f"[TelegramaQueryPlugin] Respuesta generada:\n{completion.content.content}")
+            completion = await self.agent_telegramacquery.get_response(peticion)
+            logging.info(f"[TelegramaCQueryPlugin] Respuesta generada:\n{completion.content.content}")
             return completion.content.content
         except Exception as e:
-            logging.error(f"[TelegramaQueryPlugin] Error: {str(e)}")
+            logging.error(f"[TelegramaCQueryPlugin] Error: {str(e)}")
             return f"ERROR: {str(e)}"
